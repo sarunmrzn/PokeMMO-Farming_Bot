@@ -36,16 +36,23 @@ This project automates the detection of Pokémon encounters in the PokeMMO game 
 ## Usage
 
 1. **Start PokeMMO** and log in.
-2. **Run the Automation Script**
+2. Rebind your keys `WASD` for movement and `E` for `A` key.
+3. **Run the Automation Script**
    ```powershell
    python legend.py
    ```
-3. **Stopping the Script**
+4. **Stopping the Script**
    - Press `Z` in the game window to stop automation at any time.
 
 ## Troubleshooting
 
 - **Window Not Found:** Ensure the game window title matches `РokеММO` (Cyrillic characters).
+    add ```all_windows = gw.getAllWindows()
+print("Available window titles:")
+for w in all_windows:
+    if w.title.strip():
+        print(f"  {w.title}")```
+  on line 35 to print all window titles, copy PokeMMO and replace the value on `WINDOW_NAME`, it might seem like its the same name but its different, copy and paste.
 - **OCR Issues:** The script prints raw OCR output for debugging. Adjust the `region` variable in `legend.py` if detection is inaccurate.
 - **Environment Issues:**
   - Clear Python cache if needed:
