@@ -11,8 +11,8 @@ import keyboard
 import threading
 
 # ---------------- CONFIG ----------------
-WINDOW_NAME = "РokеММO"
-region = (250, 160, 400, 20)
+WINDOW_NAME = "PokеMМO"
+region = None
 MOVE_DELAY = 0.5
 E_PRESS_DELAY = 0.25
 OCR_PSM = "--psm 7"
@@ -34,7 +34,14 @@ ALL_POKEMON_LOWER = [p.lower() for p in ALL_POKEMON]
 LEGENDARIES_LOWER = {p.lower() for p in LEGENDARIES}
 
 # ---------------- window setup ----------------
+all_windows = gw.getAllWindows()
+print("Available window titles:")
+for w in all_windows:
+    if w.title.strip():
+        print(f"  {w.title}")
+
 windows = gw.getWindowsWithTitle(WINDOW_NAME)
+
 if not windows:
     raise Exception(f"Window '{WINDOW_NAME}' not found!")
 
