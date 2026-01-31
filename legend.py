@@ -9,10 +9,11 @@ import cv2
 import pyautogui
 import keyboard
 import threading
+from difflib import SequenceMatcher
 
 # ---------------- CONFIG ----------------
 WINDOW_NAME = "РokеMMO"
-region = (0, 0, 1000, 500)
+region = (140, 175, 190, 15)  # Top left (140, 175) to bottom right (330, 190)
 MOVE_DELAY = 0.5
 E_PRESS_DELAY = 0.25
 OCR_PSM = "--psm 7"
@@ -96,14 +97,32 @@ def find_pokemon_in_text(text):
         return None
     t = text.lower()
     best = None
+    best_score = 0
     best_len = 0
+    
+    # First try exact substring matching
     for idx, name in enumerate(ALL_POKEMON_LOWER):
         if name in t:
             if len(name) > best_len:
                 best = ALL_POKEMON[idx]
+                best_score = 1.0
                 best_len = len(name)
+    
+    # If no exact match, try fuzzy matching (for OCR errors)
+    if not best:
+        for idx, name in enumerate(ALL_POKEMON_LOWER):
+            # Split text by whitespace and special chars to get words
+            words = [w for w in t.replace('.', ' ').replace('$', ' ').split() if len(w) > 2]
+            for word in words:
+                ratio = SequenceMatcher(None, name, word).ratio()
+                # If match is > 75% similar, consider it a match
+                if ratio > 0.75 and (best is None or len(name) > best_len):
+                    best = ALL_POKEMON[idx]
+                    best_score = ratio
+                    best_len = len(name)
+    
     if best:
-        print(f"[MATCH] Found '{best}' in text: {repr(text)}")
+        print(f"[MATCH] Found '{best}' (score: {best_score:.2f}) in text: {repr(text)}")
     return best
 
 # ---------------- threading flags ----------------

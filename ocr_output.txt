@@ -1,0 +1,21 @@
+
+--- Frame 0 ---
+JigglyputtLyv.$ 3 2
+
+--- Frame 1 ---
+JigglyputtLyv.$ 3 2
+
+--- Frame 2 ---
+JigglyputtLyv.$ 3 2
+
+--- Frame 3 ---
+JigglyputtLyv.$ 3 2
+
+--- Frame 4 ---
+JigglyputtLyv.$ 3 2
+
+--- Frame 5 ---
+JigglyputtLyv.$ 3 2
+
+--- Frame 6 ---
+JigglyputtLyv.$ 3 2
