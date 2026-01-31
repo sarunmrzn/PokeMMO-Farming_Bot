@@ -11,8 +11,8 @@ import keyboard
 import threading
 
 # ---------------- CONFIG ----------------
-WINDOW_NAME = "PokеMМO"
-region = None
+WINDOW_NAME = "РokеMMO"
+region = (0, 0, 1000, 500)
 MOVE_DELAY = 0.5
 E_PRESS_DELAY = 0.25
 OCR_PSM = "--psm 7"
@@ -102,6 +102,8 @@ def find_pokemon_in_text(text):
             if len(name) > best_len:
                 best = ALL_POKEMON[idx]
                 best_len = len(name)
+    if best:
+        print(f"[MATCH] Found '{best}' in text: {repr(text)}")
     return best
 
 # ---------------- threading flags ----------------
@@ -172,7 +174,6 @@ def ocr_worker():
         else:
             time.sleep(0.1)
 
-# ---------------- main ----------------
 print("Automation started. Press Z to stop.")
 
 t1 = threading.Thread(target=movement_worker, daemon=True)
