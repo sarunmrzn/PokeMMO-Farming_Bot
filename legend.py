@@ -18,6 +18,12 @@ MOVE_DELAY = 0.5
 E_PRESS_DELAY = 0.25
 OCR_PSM = "--psm 7"
 
+# Movement keys
+MOVE_LEFT_KEY = "a"   # Change to "w" if needed
+MOVE_RIGHT_KEY = "d"  # Change to "s" if needed
+BATTLE_ESCAPE_KEY = "e"  # Change to "z" if needed
+STOP_KEY = "z"  # Press this to stop the bot
+
 # ---------------- tesseract path ----------------
 if getattr(sys, "frozen", False):
     base_path = sys._MEIPASS
@@ -121,8 +127,8 @@ def find_pokemon_in_text(text):
                     best_score = ratio
                     best_len = len(name)
     
-    if best:
-        print(f"[MATCH] Found '{best}' (score: {best_score:.2f}) in text: {repr(text)}")
+    # if best:
+        # print(f"[MATCH] Found '{best}' (score: {best_score:.2f}) in text: {repr(text)}")
     return best
 
 # ---------------- threading flags ----------------
@@ -140,30 +146,42 @@ def movement_worker():
             continue
         
         # Move left
-        pyautogui.keyDown("a")
+        pyautogui.keyDown(MOVE_LEFT_KEY)
         # Wait for MOVE_DELAY, but this can be interrupted by the stop_flag
         # The wait() function returns True if the event was set
         if stop_flag.wait(MOVE_DELAY):
-            pyautogui.keyUp("a")
+            pyautogui.keyUp(MOVE_LEFT_KEY)
             break # Exit the loop immediately
-        pyautogui.keyUp("a")
+        pyautogui.keyUp(MOVE_LEFT_KEY)
 
         # Check the stop flag again before starting the next action
         if stop_flag.is_set():
             break
 
         # Move right
-        pyautogui.keyDown("d")
+        pyautogui.keyDown(MOVE_RIGHT_KEY)
         # Wait for MOVE_DELAY, can be interrupted by the stop_flag
         if stop_flag.wait(MOVE_DELAY):
-            pyautogui.keyUp("d")
+            pyautogui.keyUp(MOVE_RIGHT_KEY)
             break # Exit the loop immediately
-        pyautogui.keyUp("d")
+        pyautogui.keyUp(MOVE_RIGHT_KEY)
 
 def ocr_worker():
     while not stop_flag.is_set():
         img = capture_window(hwnd, region)
         text = ocr_region_to_text(img)
+        
+        # Check for Shiny
+        if "shiny" in text.lower():
+            print("SHINY FOUND:", text)
+            stop_flag.set()  # This stops both threads
+            try:
+                window.activate()
+                time.sleep(0.1)
+            except Exception:
+                pass
+            break
+        
         matched = find_pokemon_in_text(text)
         if matched:
             print("Detected:", matched)
@@ -180,10 +198,17 @@ def ocr_worker():
                 battle_detected.set()
                 pyautogui.keyDown("ctrl")
                 while not stop_flag.is_set():
-                    pyautogui.press("e")
+                    pyautogui.press(BATTLE_ESCAPE_KEY)
                     time.sleep(E_PRESS_DELAY)
                     img2 = capture_window(hwnd, region)
                     text2 = ocr_region_to_text(img2)
+                    
+                    # Check for Shiny during battle
+                    if "shiny" in text2.lower():
+                        print("SHINY FOUND:", text2)
+                        stop_flag.set()
+                        break
+                    
                     new_match = find_pokemon_in_text(text2)
                     if not new_match:
                         print("Battle ended. Resuming movement.")
@@ -193,7 +218,7 @@ def ocr_worker():
         else:
             time.sleep(0.1)
 
-print("Automation started. Press Z to stop.")
+print(f"Automation started. Press {STOP_KEY.upper()} to stop.")
 
 t1 = threading.Thread(target=movement_worker, daemon=True)
 t2 = threading.Thread(target=ocr_worker, daemon=True)
@@ -203,7 +228,7 @@ t2.start()
 
 try:
     while not stop_flag.is_set():
-        if keyboard.is_pressed("z"):
+        if keyboard.is_pressed(STOP_KEY):
             print("Stop key pressed.")
             stop_flag.set()
         time.sleep(0.1)
