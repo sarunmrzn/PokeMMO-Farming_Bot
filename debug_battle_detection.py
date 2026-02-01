@@ -9,7 +9,7 @@ import cv2
 import pyautogui
 
 # ---------------- CONFIG ----------------
-WINDOW_NAME = "РokеMMO"
+WINDOW_NAME = "PokeMМO"
 region = (140, 175, 190, 15)  # Top left (140, 175) to bottom right (330, 190)
 OCR_PSM = "--psm 7"
 
