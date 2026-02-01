@@ -127,8 +127,8 @@ def find_pokemon_in_text(text):
                     best_score = ratio
                     best_len = len(name)
     
-    # if best:
-        # print(f"[MATCH] Found '{best}' (score: {best_score:.2f}) in text: {repr(text)}")
+    if best:
+        print(f"[MATCH] Found '{best}' (score: {best_score:.2f}) in text: {repr(text)}")
     return best
 
 # ---------------- threading flags ----------------
@@ -203,12 +203,6 @@ def ocr_worker():
                     time.sleep(E_PRESS_DELAY)
                     img2 = capture_window(hwnd, region)
                     text2 = ocr_region_to_text(img2)
-
-                    # Check for Shiny during battle
-                    if "shiny" in text2.lower():
-                        print("SHINY FOUND:", text2)
-                        stop_flag.set()
-                        break
 
                     new_match = find_pokemon_in_text(text2)
                     if not new_match:
