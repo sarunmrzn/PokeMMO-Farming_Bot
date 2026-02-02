@@ -12,7 +12,7 @@ import threading
 from difflib import SequenceMatcher
 
 # ---------------- CONFIG ----------------
-WINDOW_NAME = "PokeMМO"
+WINDOW_NAME = "РokеМMO"
 region = (140, 175, 190, 15)  # Top left (140, 175) to bottom right (330, 190)
 MOVE_DELAY = 0.5
 E_PRESS_DELAY = 0.25
