@@ -12,15 +12,15 @@ import threading
 from difflib import SequenceMatcher
 
 # ---------------- CONFIG ----------------
-WINDOW_NAME = "РokеМMO"
+WINDOW_NAME = "PokeМMO"
 region = (140, 175, 190, 15)  # Top left (140, 175) to bottom right (330, 190)
 MOVE_DELAY = 0.5
 E_PRESS_DELAY = 0.25
 OCR_PSM = "--psm 7"
 
 # Movement keys
-MOVE_LEFT_KEY = "w"   # Change to "w" if needed
-MOVE_RIGHT_KEY = "s"  # Change to "s" if needed
+MOVE_LEFT_KEY = "a"   # Change to "w" if needed
+MOVE_RIGHT_KEY = "d"  # Change to "s" if needed
 BATTLE_ESCAPE_KEY = "e"  # Change to "z" if needed
 STOP_KEY = "z"  # Press this to stop the bot
 

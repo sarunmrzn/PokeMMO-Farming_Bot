@@ -12,10 +12,10 @@ import threading
 from difflib import SequenceMatcher
 
 # ---------------- CONFIG ----------------
-WINDOW_NAME = "РokеMMO"
+WINDOW_NAME = "PokеМMO"
 region = (140, 175, 190, 15)  # Top left (140, 175) to bottom right (330, 190)
 MOVE_DELAY = 0.5
-E_PRESS_DELAY = 0.25
+E_PRESS_DELAY = 0
 OCR_PSM = "--psm 7"
 
 # Movement keys
@@ -196,10 +196,10 @@ def ocr_worker():
                 break
             else:
                 battle_detected.set()
-                pyautogui.keyDown("ctrl")
+                # pyautogui.keyDown("ctrl")
                 while not stop_flag.is_set():
                     pyautogui.press(BATTLE_ESCAPE_KEY)
-                    time.sleep(E_PRESS_DELAY)
+                    # time.sleep(E_PRESS_DELAY)
                     img2 = capture_window(hwnd, region)
                     text2 = ocr_region_to_text(img2)
                     
@@ -214,7 +214,7 @@ def ocr_worker():
                         print("Battle ended. Resuming movement.")
                         battle_detected.clear()
                         break
-                pyautogui.keyUp("ctrl")
+                # pyautogui.keyUp("ctrl")
         else:
             time.sleep(0.1)
 
